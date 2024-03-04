@@ -1,0 +1,2 @@
+class Neta < ApplicationRecord
+end
