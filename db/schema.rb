@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_04_010518) do
+ActiveRecord::Schema[7.0].define(version: 2024_03_05_105844) do
   create_table "dislikes", charset: "utf8mb4", force: :cascade do |t|
     t.integer "don_id"
     t.integer "neta_id"
@@ -20,8 +20,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_04_010518) do
   end
 
   create_table "dons", charset: "utf8mb4", force: :cascade do |t|
-    t.string "name"
-    t.text "description"
+    t.string "title"
+    t.text "image"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -41,6 +41,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_04_010518) do
   create_table "orders", charset: "utf8mb4", force: :cascade do |t|
     t.integer "don_id"
     t.string "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "tests", charset: "utf8mb4", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
