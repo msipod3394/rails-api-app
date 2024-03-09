@@ -21,7 +21,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_05_105844) do
 
   create_table "dons", charset: "utf8mb4", force: :cascade do |t|
     t.string "title"
-    t.text "image"
+    t.string "image"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -34,6 +34,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_05_105844) do
   end
 
   create_table "netas", charset: "utf8mb4", force: :cascade do |t|
+    t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

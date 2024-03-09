@@ -3,8 +3,8 @@ class NetaController < ApplicationController
   end
 
   def show
-      # 全てのnetaをjsonで返す
-      @netas = Neta.all
-      render json: @netas    
+    # 全てのnetaをjsonで返す
+    @netas = Neta.all
+    render json: @netas
   end
 end

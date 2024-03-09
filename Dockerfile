@@ -4,6 +4,9 @@ FROM ruby:3.1
 
 # Rails 7ではWebpackerが標準では組み込まれなくなったので、yarnやnodejsのインストールが不要
 
+# mysql-clientを入れないと、pathが通らないよって怒られる。
+# RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs mysql-client
+
 # ruby3.1のイメージがBundler version 2.3.7で失敗するので、gemのバージョンを追記
 ARG RUBYGEMS_VERSION=3.3.20
 
