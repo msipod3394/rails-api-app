@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'ingredients/index'
+  get 'ingredients/show'
   get 'user/index'
   get 'user/show'
   get 'neta/index'
