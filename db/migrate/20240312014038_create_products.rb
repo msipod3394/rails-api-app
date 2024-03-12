@@ -6,6 +6,7 @@ class CreateProducts < ActiveRecord::Migration[7.0]
 
       t.timestamps     # 作成日時/更新日時
     end
+    # 一意性制約のバリデーション
     add_index :products, :name, unique: true
   end
 end
