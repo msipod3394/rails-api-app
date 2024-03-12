@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_11_234251) do
+ActiveRecord::Schema[7.0].define(version: 2024_03_12_003000) do
   create_table "dislikes", charset: "utf8mb4", force: :cascade do |t|
     t.integer "don_id"
     t.integer "neta_id"
@@ -20,7 +20,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_11_234251) do
   end
 
   create_table "dons", charset: "utf8mb4", force: :cascade do |t|
-    t.string "title"
+    t.string "name"
     t.string "image"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

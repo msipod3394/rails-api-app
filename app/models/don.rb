@@ -1,3 +1,5 @@
 class Don < ApplicationRecord
 
+  
+
 end
