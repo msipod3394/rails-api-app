@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'item_ingredient/index'
+  get 'item_ingredient/show'
   get 'dislike/index'
   get 'dislike/show'
   get 'favorite/index'

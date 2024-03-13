@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_13_122015) do
+ActiveRecord::Schema[7.0].define(version: 2024_03_13_131117) do
   create_table "dislikes", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "ingredient_id", null: false
     t.bigint "user_id", null: false
@@ -34,6 +34,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_13_122015) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_ingredients_on_name", unique: true
+  end
+
+  create_table "item_ingredient", charset: "utf8mb4", force: :cascade do |t|
+    t.bigint "item_id", null: false
+    t.bigint "ingredient_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ingredient_id"], name: "index_item_ingredient_on_ingredient_id"
+    t.index ["item_id"], name: "index_item_ingredient_on_item_id"
   end
 
   create_table "items", charset: "utf8mb4", force: :cascade do |t|
@@ -67,6 +76,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_13_122015) do
   add_foreign_key "dislikes", "users"
   add_foreign_key "favorites", "items"
   add_foreign_key "favorites", "users"
+  add_foreign_key "item_ingredient", "ingredients"
+  add_foreign_key "item_ingredient", "items"
   add_foreign_key "orders", "items"
   add_foreign_key "orders", "users"
 end
