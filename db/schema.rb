@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_13_141947) do
+ActiveRecord::Schema[7.0].define(version: 2024_03_17_004807) do
   create_table "dislikes", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "ingredient_id", null: false
     t.bigint "user_id", null: false
@@ -73,11 +73,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_13_141947) do
   end
 
   add_foreign_key "dislikes", "ingredients"
-  add_foreign_key "dislikes", "users"
+  add_foreign_key "dislikes", "users", on_delete: :cascade
   add_foreign_key "favorites", "items"
-  add_foreign_key "favorites", "users"
+  add_foreign_key "favorites", "users", on_delete: :cascade
   add_foreign_key "ingredient_items", "ingredients"
   add_foreign_key "ingredient_items", "items"
   add_foreign_key "orders", "items"
-  add_foreign_key "orders", "users"
 end

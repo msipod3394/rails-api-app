@@ -1,8 +1,11 @@
 class User < ApplicationRecord
+  has_many :orders, dependent: :destroy
 
-  # 空文字チェック（nameの文字数が最小値1であることを検証）
-  validates :user_name, presence: { message: "nameは空で登録できません" }, length: { minimum: 1 }
-  validates :email, presence: { message: "nameは空で登録できません" }, length: { minimum: 1 }
-  validates :password, presence: { message: "nameは空で登録できません" }, length: { minimum: 1 }
+  before_destroy :delete_related_orders
 
+  private
+
+  def delete_related_orders
+    self.orders.destroy_all
+  end
 end
