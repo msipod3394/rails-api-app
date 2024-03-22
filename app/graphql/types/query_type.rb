@@ -30,39 +30,129 @@ module Types
     # end
 
     # 商品情報の取得
-    field :items, [Types::ItemType], null: false
-    def items
-      Item.all
+    field :items, [Types::ItemType], null: false do
+      argument :field_name, String, required: false
+      argument :field_value, String, required: false
     end
+
+    def items(field_name: nil, field_value: nil)
+      if field_name && field_value
+        if field_name.downcase == 'id'
+          Item.where(id: field_value)
+        else
+          condition = "#{field_name} = :value"
+          Item.where(condition, value: field_value)
+        end
+      else
+        Item.all
+      end
+    end
+
 
     # 具材情報の取得
-    field :ingredients, [Types::IngredientType], null: false
-    def ingredients
-      Ingredient.all
+    field :ingredients, [Types::IngredientType], null: false do
+      argument :field_name, String, required: false
+      argument :field_value, String, required: false
     end
+
+    def ingredients(field_name: nil, field_value: nil)
+      if field_name && field_value
+        if field_name.downcase == 'id'
+          Ingredient.where(id: field_value)
+        else
+          condition = "#{field_name} = :value"
+          Ingredient.where(condition, value: field_value)
+        end
+      else
+        Ingredient.all
+      end
+    end
+
 
     # 注文履歴の取得
-    field :orders, [Types::OrderType], null: false
-    def orders
-      Order.all
+    field :orders, [Types::OrderType], null: false do
+      argument :field_name, String, required: false
+      argument :field_value, String, required: false
     end
+
+    def orders(field_name: nil, field_value: nil)
+      if field_name && field_value
+        if field_name.downcase == 'id'
+          Order.where(id: field_value)
+        else
+          condition = "#{field_name} = :value"
+          Order.where(condition, value: field_value)
+        end
+      else
+        Order.all
+      end
+    end
+
 
     # ユーザー情報の取得
-    field :users, [Types::UserType], null: false
-    def users
-      User.all
+    field :users, [Types::UserType], null: false do
+      argument :field_name, String, required: false
+      argument :field_value, String, required: false
     end
 
+    def users(field_name: nil, field_value: nil)
+      if field_name && field_value
+        if field_name.downcase == 'id'
+          User.where(id: field_value)
+        else
+          condition = "#{field_name} = :value"
+          User.where(condition, value: field_value)
+        end
+      else
+        User.all
+      end
+    end
+
+
     # お気に入り商品の取得
-    field :favorites, [Types::FavoriteType], null: false
-    def favorites
-      Favorite.all
+    field :favorites, [Types::FavoriteType], null: false do
+      argument :user_id, ID, required: false
+      argument :email, String, required: false
+    end
+
+    def favorites(user_id: nil, email: nil)
+      ## ユーザーのIDから取得
+      if user_id
+        Favorite.where(user_id: user_id)
+
+      ## ユーザーのemailから取得
+      elsif email
+      user = User.find_by(email: email)
+      return [] unless user
+      Favorite.where(user_id: user.id)
+
+      ## 引数がなければ全件取得
+      else
+        Favorite.all
+      end
     end
 
     # 苦手具材の取得
-    field :dislikes, [Types::DislikeType], null: false
-    def dislikes
-      Dislike.all
+    field :dislikes, [Types::DislikeType], null: false do
+      argument :user_id, ID, required: false
+      argument :email, String, required: false
+    end
+
+    def dislikes(user_id: nil, email: nil)
+      ## ユーザーのIDから取得
+      if user_id
+        Dislike.where(user_id: user_id)
+
+      ## ユーザーのemailから取得
+      elsif email
+      user = User.find_by(email: email)
+      return [] unless user
+      Dislike.where(user_id: user.id)
+
+      ## 引数がなければ全件取得
+      else
+        Dislike.all
+      end
     end
 
   end
