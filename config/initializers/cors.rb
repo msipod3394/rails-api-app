@@ -7,11 +7,11 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins "http://0.0.0.0:3001"
+    origins "http://0.0.0.0:3000"
 
     resource "*",
       headers: :any,
-      methods: [:get, :post, :put, :patch, :delete, :options, :head]
-      credentials :true
+      methods: [:get, :post, :put, :patch, :delete, :options, :head],
+      credentials: true # クレデンシャルモードを有効にする
   end
 end
