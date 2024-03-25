@@ -30,12 +30,12 @@ module Types
     # end
 
     # 商品情報の取得
-    field :items, [Types::ItemType], null: false do
+    field :items_search, [Types::ItemType], null: false do
       argument :field_name, String, required: false
       argument :field_value, String, required: false
     end
 
-    def items(field_name: nil, field_value: nil)
+    def items_search(field_name: nil, field_value: nil)
       if field_name && field_value
         if field_name.downcase == 'id'
           Item.where(id: field_value)
@@ -46,6 +46,15 @@ module Types
       else
         Item.all
       end
+    end
+
+    field :items_all, [Types::ItemType], null: false do
+      argument :field_name, String, required: false
+      argument :field_value, String, required: false
+    end
+
+    def items_all
+      Item.all
     end
 
 
