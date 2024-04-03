@@ -332,7 +332,7 @@
         },
         {
           "kind": "OBJECT",
-          "name": "Item",
+          "name": "IngredientItem",
           "description": null,
           "interfaces": [
 
@@ -340,14 +340,14 @@
           "possibleTypes": null,
           "fields": [
             {
-              "name": "createdAt",
+              "name": "id",
               "description": null,
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "ISO8601DateTime",
+                  "name": "ID",
                   "ofType": null
                 }
               },
@@ -357,6 +357,37 @@
 
               ]
             },
+            {
+              "name": "name",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": [
+
+              ]
+            }
+          ],
+          "inputFields": null,
+          "enumValues": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "Item",
+          "description": null,
+          "interfaces": [
+
+          ],
+          "possibleTypes": null,
+          "fields": [
             {
               "name": "id",
               "description": null,
@@ -394,15 +425,23 @@
               ]
             },
             {
-              "name": "name",
+              "name": "ingredients",
               "description": null,
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "IngredientItem",
+                      "ofType": null
+                    }
+                  }
                 }
               },
               "isDeprecated": false,
@@ -412,14 +451,14 @@
               ]
             },
             {
-              "name": "updatedAt",
+              "name": "name",
               "description": null,
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "ISO8601DateTime",
+                  "name": "String",
                   "ofType": null
                 }
               },
@@ -707,7 +746,7 @@
               ]
             },
             {
-              "name": "itemsAll",
+              "name": "items",
               "description": null,
               "type": {
                 "kind": "NON_NULL",
@@ -730,54 +769,17 @@
               "deprecationReason": null,
               "args": [
                 {
-                  "name": "fieldName",
+                  "name": "id",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
-                    "name": "String",
+                    "name": "ID",
                     "ofType": null
                   },
                   "defaultValue": null,
                   "isDeprecated": false,
                   "deprecationReason": null
                 },
-                {
-                  "name": "fieldValue",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  },
-                  "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
-                }
-              ]
-            },
-            {
-              "name": "itemsSearch",
-              "description": null,
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "Item",
-                      "ofType": null
-                    }
-                  }
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "args": [
                 {
                   "name": "fieldName",
                   "description": null,

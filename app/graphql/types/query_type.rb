@@ -29,33 +29,30 @@ module Types
     #   "Hello test"
     # end
 
+
     # 商品情報の取得
-    field :items_search, [Types::ItemType], null: false do
+    field :items, [Types::ItemType], null: false do
+      argument :id, ID, required: false
       argument :field_name, String, required: false
       argument :field_value, String, required: false
     end
 
-    def items_search(field_name: nil, field_value: nil)
-      if field_name && field_value
-        if field_name.downcase == 'id'
-          Item.where(id: field_value)
-        else
-          condition = "#{field_name} = :value"
-          Item.where(condition, value: field_value)
-        end
-      else
-        Item.all
+    def items(id: nil, field_name: nil, field_value: nil)
+      items = Item.includes(:ingredient_items)
+
+      if id
+        items = items.where(id: id)
       end
+
+      if field_name && field_value
+        # フィールド名とフィールド値を使用して検索するロジックを追加することができます
+        # 例えば、field_name が "name" で field_value が "example" の場合は以下のようになります
+        # items = items.where("name = ?", field_value)
+      end
+
+      items.all
     end
 
-    field :items_all, [Types::ItemType], null: false do
-      argument :field_name, String, required: false
-      argument :field_value, String, required: false
-    end
-
-    def items_all
-      Item.all
-    end
 
 
     # 具材情報の取得
@@ -163,6 +160,9 @@ module Types
         Dislike.all
       end
     end
+
+
+
 
   end
 end
