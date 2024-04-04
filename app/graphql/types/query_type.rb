@@ -76,24 +76,24 @@ module Types
 
 
     # 注文履歴の取得
-    field :orders, [Types::OrderType], null: false do
-      argument :field_name, String, required: false
-      argument :field_value, String, required: false
+    field :order, [Types::OrderType], null: false do
+      description 'emailを指定して検索、emailの指定がなければ全件取得'
+      argument :email, String, required: false
     end
 
-    def orders(field_name: nil, field_value: nil)
-      if field_name && field_value
-        if field_name.downcase == 'id'
-          Order.where(id: field_value)
+    def order(email: nil)
+      if email
+        user = User.find_by(email: email)
+        if user
+          user.orders
         else
-          condition = "#{field_name} = :value"
-          Order.where(condition, value: field_value)
+          [] # ユーザーが見つからない場合は空のリストを返す
         end
       else
         Order.all
       end
     end
-
+    
 
     # ユーザー情報の取得
     field :users, [Types::UserType], null: false do
@@ -138,20 +138,22 @@ module Types
       end
     end
 
+
+
     # 苦手具材の取得
     field :dislikes, [Types::DislikeType], null: false do
       argument :user_id, ID, required: false
-      argument :email, String, required: false
+      argument :ingredient_id, String, required: false
     end
 
-    def dislikes(user_id: nil, email: nil)
+    def dislikes(user_id: nil, ingredient_id: nil)
       ## ユーザーのIDから取得
       if user_id
         Dislike.where(user_id: user_id)
 
-      ## ユーザーのemailから取得
-      elsif email
-      user = User.find_by(email: email)
+      ## ユーザーのingredient_idから取得
+      elsif ingredient_id
+      user = User.find_by(ingredient_id: ingredient_id)
       return [] unless user
       Dislike.where(user_id: user.id)
 
