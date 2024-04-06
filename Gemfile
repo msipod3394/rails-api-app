@@ -51,5 +51,6 @@ group :development do
   # gem "spring"
 end
 
-
 gem "sprockets-rails", "~> 3.4"
+
+gem 'devise'
