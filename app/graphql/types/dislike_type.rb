@@ -1,4 +1,4 @@
-# 注文履歴
+# 苦手ネタ
 
 module Types
   class DislikeType < Types::BaseObject
@@ -8,6 +8,12 @@ module Types
     field :user, Types::UserType, null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
+
+    # Dislikeオブジェクトがingredientを持っていない場合はnilを返す
+    def ingredient
+      return object.ingredient if object.respond_to?(:ingredient)
+      nil
+    end
 
   end
 end

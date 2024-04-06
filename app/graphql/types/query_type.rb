@@ -93,7 +93,7 @@ module Types
         Order.all
       end
     end
-    
+
 
     # ユーザー情報の取得
     field :users, [Types::UserType], null: false do
@@ -142,28 +142,22 @@ module Types
 
     # 苦手具材の取得
     field :dislikes, [Types::DislikeType], null: false do
-      argument :user_id, ID, required: false
-      argument :ingredient_id, String, required: false
+      description 'emailを指定して検索、emailの指定がなければ全件取得'
+      argument :email, String, required: false
     end
 
-    def dislikes(user_id: nil, ingredient_id: nil)
-      ## ユーザーのIDから取得
-      if user_id
-        Dislike.where(user_id: user_id)
-
-      ## ユーザーのingredient_idから取得
-      elsif ingredient_id
-      user = User.find_by(ingredient_id: ingredient_id)
-      return [] unless user
-      Dislike.where(user_id: user.id)
-
-      ## 引数がなければ全件取得
+    def dislikes(email: nil)
+      if email
+        user = User.find_by(email: email)
+        if user
+          user.dislikes
+        else
+          []
+        end
       else
         Dislike.all
       end
     end
-
-
 
 
   end

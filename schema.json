@@ -389,6 +389,24 @@
           "possibleTypes": null,
           "fields": [
             {
+              "name": "createdAt",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ISO8601DateTime",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": [
+
+              ]
+            },
+            {
               "name": "id",
               "description": null,
               "type": {
@@ -459,6 +477,24 @@
                 "ofType": {
                   "kind": "SCALAR",
                   "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": [
+
+              ]
+            },
+            {
+              "name": "updatedAt",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ISO8601DateTime",
                   "ofType": null
                 }
               },
@@ -795,7 +831,7 @@
           "fields": [
             {
               "name": "dislikes",
-              "description": null,
+              "description": "emailを指定して検索、emailの指定がなければ全件取得",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -817,19 +853,7 @@
               "deprecationReason": null,
               "args": [
                 {
-                  "name": "userId",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "ID",
-                    "ofType": null
-                  },
-                  "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
-                },
-                {
-                  "name": "ingredientId",
+                  "name": "email",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",

@@ -1,8 +1,8 @@
-# 注文履歴
+# 注文履歴登録
 
 module Mutations
   class CreateOrder < BaseMutation
-    description "Create a new order"
+    description "注文履歴登録"
 
     # 引数の定義
     argument :item_id, ID, required: true
