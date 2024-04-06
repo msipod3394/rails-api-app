@@ -36,8 +36,16 @@ module Types
     end
 
     def create_dislike(ingredient_id:, user_id:)
-      # 新しいお気に入りを作成する関数
+      # 苦手ネタ登録する関数
       Dislike.create(ingredient_id: ingredient_id, user_id: user_id)
+    end
+
+    # 苦手ネタ削除
+    field :deleteDislike, mutation: Mutations::DeleteDislike
+
+    def delete_dislike(ingredient_id:, user_id:)
+      # 苦手ネタ登録する関数
+      Dislike.delete(ingredient_id: ingredient_id, user_id: user_id)
     end
 
     # ユーザー登録
