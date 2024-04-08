@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_04_08_000715) do
+ActiveRecord::Schema[7.0].define(version: 2024_04_08_001824) do
   create_table "dislikes", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "ingredient_id", null: false
     t.bigint "user_id", null: false
@@ -72,6 +72,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_08_000715) do
     t.string "user_name"
     t.string "email", default: "", null: false
     t.string "reset_password_token"
+    t.string "jti", null: false
   end
 
   add_foreign_key "dislikes", "ingredients"
