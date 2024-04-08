@@ -1,32 +1,32 @@
 # 苦手ネタ登録
 
 module Mutations
-  class DeleteDislike < BaseMutation
-    description "苦手ネタ削除"
-
-    # input型の定義
-    class InputType < Types::BaseInputObject
-      argument :ingredient_id, ID, required: true
-      argument :user_id, ID, required: true
-    end
+  class CreateDislike < BaseMutation
+    description "苦手ネタ登録"
 
     # 引数の定義
-    argument :input, InputType, required: true
+    argument :ingredient_id, ID, required: true
+    argument :email, String, required: true
 
     # フィールドの定義
-    field :success, Boolean, null: false
+    field :dislike, Types::DislikeType, null: false
 
     # ミューテーションの処理
-    def resolve(input:)
-      dislike = Dislike.find_by(ingredient_id: input[:ingredient_id], user_id: input[:user_id])
-      if dislike
-        dislike.destroy
-        { success: true }
-      else
-        GraphQL::ExecutionError.new("Dislike with ingredient ID #{input[:ingredient_id]} for user ID #{input[:user_id]} not found.")
+    def resolve(ingredient_id:, email:)
+      ingredient = Ingredient.find(ingredient_id)
+      user = User.find_by(email: email)
+
+      # ユーザーが存在しない場合はエラーを返す
+      unless user
+        raise GraphQL::ExecutionError, "指定されたメールアドレスに対応するユーザーが見つかりませんでした。"
       end
-    rescue ActiveRecord::RecordNotDestroyed => e
-      GraphQL::ExecutionError.new("Failed to delete dislike with ingredient ID #{input[:ingredient_id]} for user ID #{input[:user_id]}.")
+
+      # 苦手ネタを作成する
+      dislike = Dislike.create(ingredient: ingredient, user: user)
+
+      { dislike: dislike }
+    rescue ActiveRecord::RecordNotFound => e
+      GraphQL::ExecutionError.new("指定されたネタが見つかりませんでした。")
     end
   end
 end

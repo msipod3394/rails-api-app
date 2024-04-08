@@ -31,22 +31,35 @@ module Types
     # 苦手ネタ登録
     field :create_dislike, Types::DislikeType, null: false do
       # 引数
-      argument :ingredient_id, String, required: true
-      argument :user_id, String, required: true
+      argument :ingredient_id, ID, required: true
+      argument :email, String, required: true
     end
 
-    def create_dislike(ingredient_id:, user_id:)
-      # 苦手ネタ登録する関数
-      Dislike.create(ingredient_id: ingredient_id, user_id: user_id)
+    def create_dislike(ingredient_id:, email:)
+      user = User.find_by(email: email)
+
+      # ユーザーが存在しない場合はエラーを返す
+      unless user
+        raise GraphQL::ExecutionError, "指定されたメールアドレスに対応するユーザーが見つかりませんでした。"
+      end
+
+      # 苦手ネタを作成する
+      dislike = Dislike.create(ingredient_id: ingredient_id, user: user)
+
+      dislike
+    rescue ActiveRecord::RecordNotFound => e
+      GraphQL::ExecutionError.new("指定された食材が見つかりませんでした。")
     end
+
 
     # 苦手ネタ削除
     field :deleteDislike, mutation: Mutations::DeleteDislike
 
-    def delete_dislike(ingredient_id:, user_id:)
-      # 苦手ネタ登録する関数
-      Dislike.delete(ingredient_id: ingredient_id, user_id: user_id)
+    def delete_dislike(ingredient_id:, email:)
+      # 苦手ネタ削除関数
+      Dislike.delete(ingredient_id: ingredient_id, email: email)
     end
+
 
     # ユーザー登録
     field :create_user, Types::UserType, null: false do
