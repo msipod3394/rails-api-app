@@ -54,3 +54,5 @@ end
 gem "sprockets-rails", "~> 3.4"
 
 gem 'devise'
+
+gem 'devise-jwt'
