@@ -28,37 +28,68 @@ module Types
       Favorite.create(item_id: item_id, user_id: user_id)
     end
 
-    # 苦手ネタ登録
-    field :create_dislike, Types::DislikeType, null: false do
+
+# 苦手ネタ登録
+field :create_dislikes, [Types::DislikeType], null: false do
+  # 引数
+  argument :ingredient_ids, [String], required: true
+  argument :email, String, required: true
+end
+
+def create_dislikes(ingredient_ids:, email:)
+  user = User.find_by(email: email)
+
+  # ユーザーが存在しない場合はエラーを返す
+  unless user
+    raise GraphQL::ExecutionError, "指定されたメールアドレスに対応するユーザーが見つかりませんでした。"
+  end
+
+  dislikes = []
+
+  # 各 ingredient_id に対して処理を行う
+  ingredient_ids.each do |ingredient_id|
+    begin
+      # 苦手ネタを作成する
+      dislike = Dislike.create(ingredient_id: ingredient_id, user: user)
+      dislikes << dislike
+    rescue ActiveRecord::RecordNotFound => e
+      # 指定された食材が見つからない場合はエラーを返す
+      raise GraphQL::ExecutionError.new("指定された食材が見つかりませんでした。")
+    end
+  end
+
+  dislikes
+end
+
+
+
+
+    # # 苦手ネタ削除
+    field :delete_dislike, Types::DislikeType, null: false do
       # 引数
-      argument :ingredient_id, ID, required: true
+      argument :ingredient_id, String, required: true
       argument :email, String, required: true
     end
 
-    def create_dislike(ingredient_id:, email:)
-      user = User.find_by(email: email)
-
-      # ユーザーが存在しない場合はエラーを返す
-      unless user
-        raise GraphQL::ExecutionError, "指定されたメールアドレスに対応するユーザーが見つかりませんでした。"
-      end
-
-      # 苦手ネタを作成する
-      dislike = Dislike.create(ingredient_id: ingredient_id, user: user)
-
-      dislike
-    rescue ActiveRecord::RecordNotFound => e
-      GraphQL::ExecutionError.new("指定された食材が見つかりませんでした。")
-    end
-
-
-    # 苦手ネタ削除
-    field :deleteDislike, mutation: Mutations::DeleteDislike
+    field :success, Boolean, null: false  # 追加
 
     def delete_dislike(ingredient_id:, email:)
-      # 苦手ネタ削除関数
-      Dislike.delete(ingredient_id: ingredient_id, email: email)
+      user = User.find_by(email: email)
+      if user
+        dislike = Dislike.find_by(ingredient_id: ingredient_id, user_id: user.id)
+        if dislike
+          dislike.destroy
+          { success: true }
+        else
+          GraphQL::ExecutionError.new("メールアドレス #{email} のユーザーには、食材ID #{ingredient_id} に関連する嫌いなものが見つかりませんでした。")
+        end
+      else
+        GraphQL::ExecutionError.new("メールアドレス #{email} のユーザーが見つかりませんでした。")
+      end
+    rescue ActiveRecord::RecordNotDestroyed => e
+      GraphQL::ExecutionError.new("メールアドレス #{email} のユーザーに関連する食材ID #{ingredient_id} の嫌いなものの削除に失敗しました。")
     end
+
 
 
     # ユーザー登録
@@ -72,6 +103,7 @@ module Types
       # 新しいユーザーを登録する関数
       User.create(email: email, password: password)
     end
+
 
   end
 end
