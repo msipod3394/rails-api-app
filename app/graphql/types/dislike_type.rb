@@ -9,7 +9,7 @@ module Types
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
     field :success, Boolean, null: true
-    
+
     # Dislikeオブジェクトがingredientを持っていない場合はnilを返す
     def ingredient
       return object.ingredient if object.respond_to?(:ingredient)
