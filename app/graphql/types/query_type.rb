@@ -96,22 +96,12 @@ module Types
 
 
     # ユーザー情報の取得
-    field :users, [Types::UserType], null: false do
-      argument :field_name, String, required: false
-      argument :field_value, String, required: false
+    field :get_user, Types::UserType, null: true do
+      argument :email, String, required: true
     end
 
-    def users(field_name: nil, field_value: nil)
-      if field_name && field_value
-        if field_name.downcase == 'id'
-          User.where(id: field_value)
-        else
-          condition = "#{field_name} = :value"
-          User.where(condition, value: field_value)
-        end
-      else
-        User.all
-      end
+    def get_user(email:)
+      User.find_by(email: email)
     end
 
 

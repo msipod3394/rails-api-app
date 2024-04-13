@@ -3,16 +3,28 @@
 module Types
   class MutationType < Types::BaseObject
 
+
     # 注文履歴登録
     field :create_order, Types::OrderType, null: false do
-      # 引数
       argument :item_id, String, required: true
-      argument :user_id, String, required: true
+      argument :email, String, required: true
     end
 
-    def create_order(item_id:, user_id:)
-      # 新しい注文を作成する関数
-      Order.create(item_id: item_id, user_id: user_id)
+    def create_order(item_id:, email:)
+      item = Item.find(item_id)
+      user = User.find_by(email: email)
+
+      # ユーザーが存在しない場合はエラーを返す
+      unless user
+        raise GraphQL::ExecutionError, "指定されたメールアドレスに対応するユーザーが見つかりませんでした。"
+      end
+
+      # 新しい注文を作成する
+      order = Order.create(item: item, user: user)
+
+      # 作成された注文オブジェクトを返す
+      order
+
     end
 
 
@@ -53,8 +65,15 @@ module Types
 
       # 各 item_id に対して処理を行う
       item_ids.each do |item_id|
+
+      # すでにお気に入りに登録されているか確認する
+      existing_favorite = Favorite.find_by(item_id: item_id, user_id: user.id)
+
+      # すでに登録されている場合はスキップする
+      next if existing_favorite
+
         begin
-          # 苦手ネタを作成する
+          # お気に入りを作成する
           favirite = Favorite.create(item_id: item_id, user: user)
           favorites << favirite
         rescue ActiveRecord::RecordNotFound => e
