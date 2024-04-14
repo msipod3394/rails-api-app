@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_04_09_051309) do
+ActiveRecord::Schema[7.0].define(version: 2024_04_13_105607) do
   create_table "dislikes", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "ingredient_id", null: false
     t.bigint "user_id", null: false
@@ -63,16 +63,16 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_09_051309) do
   end
 
   create_table "users", charset: "utf8mb4", force: :cascade do |t|
+    t.string "user_name", null: false
+    t.string "email", null: false
     t.string "password"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "encrypted_password", default: "", null: false
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.string "user_name"
-    t.string "email", default: "", null: false
-    t.string "reset_password_token"
     t.string "jti", null: false
+    t.string "encrypted_password"
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["jti"], name: "index_users_on_jti", unique: true
+    t.index ["user_name"], name: "index_users_on_user_name", unique: true
   end
 
   add_foreign_key "dislikes", "ingredients"
@@ -82,4 +82,5 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_09_051309) do
   add_foreign_key "ingredient_items", "ingredients"
   add_foreign_key "ingredient_items", "items"
   add_foreign_key "orders", "items"
+  add_foreign_key "orders", "users", on_delete: :cascade
 end
