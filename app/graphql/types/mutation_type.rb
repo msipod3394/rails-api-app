@@ -4,15 +4,18 @@ module Types
   class MutationType < Types::BaseObject
 
 
+    # --------------------------------
+    # order / 注文履歴
+    # --------------------------------
     # 注文履歴登録
     field :create_order, Types::OrderType, null: false do
       argument :item_id, String, required: true
-      argument :email, String, required: true
+      argument :user_id, String, required: true
     end
 
-    def create_order(item_id:, email:)
+    def create_order(item_id:, user_id:)
       item = Item.find(item_id)
-      user = User.find_by(email: email)
+      user = User.find_by(id: user_id)
 
       # ユーザーが存在しない場合はエラーを返す
       unless user
@@ -50,11 +53,11 @@ module Types
     field :create_favorites, [Types::FavoriteType], null: false do
       # 引数
       argument :item_ids, [String], required: true
-      argument :email, String, required: true
+      argument :user_id, String, required: true
     end
 
-    def create_favorites(item_ids:, email:)
-      user = User.find_by(email: email)
+    def create_favorites(item_ids:, user_id:)
+      user = User.find_by(id: user_id)
 
       # ユーザーが存在しない場合はエラーを返す
       unless user
@@ -90,11 +93,11 @@ module Types
     field :delete_favorites, Boolean, null: false do
       # 引数
       argument :item_ids, [String], required: true
-      argument :email, String, required: true
+      argument :user_id, String, required: true
     end
 
-    def delete_favorites(item_ids:, email:)
-      user = User.find_by(email: email)
+    def delete_favorites(item_ids:, user_id:)
+      user = User.find_by(id: user_id)
 
       # ユーザーが存在しない場合はエラーを返す
       unless user
@@ -127,11 +130,11 @@ module Types
     field :create_dislikes, [Types::DislikeType], null: false do
       # 引数
       argument :ingredient_ids, [String], required: true
-      argument :email, String, required: true
+      argument :user_id, String, required: true
     end
 
-    def create_dislikes(ingredient_ids:, email:)
-      user = User.find_by(email: email)
+    def create_dislikes(ingredient_ids:, user_id:)
+      user = User.find_by(id: user_id)
 
       # ユーザーが存在しない場合はエラーを返す
       unless user
@@ -160,11 +163,11 @@ module Types
     field :delete_dislikes, Boolean, null: false do
       # 引数
       argument :ingredient_ids, [String], required: true
-      argument :email, String, required: true
+      argument :user_id, String, required: true
     end
 
-    def delete_dislikes(ingredient_ids:, email:)
-      user = User.find_by(email: email)
+    def delete_dislikes(ingredient_ids:, user_id:)
+      user = User.find_by(id: user_id)
 
       # ユーザーが存在しない場合はエラーを返す
       unless user

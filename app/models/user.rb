@@ -10,6 +10,7 @@ class User < ApplicationRecord
          :jwt_authenticatable, jwt_revocation_strategy: self
   has_many :orders, dependent: :destroy
   has_many :dislikes
+  has_many :favorites
   before_destroy :delete_related_orders
 
   private

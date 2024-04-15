@@ -63,7 +63,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_09_051309) do
   end
 
   create_table "users", charset: "utf8mb4", force: :cascade do |t|
-    t.string "password"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "encrypted_password", default: "", null: false
@@ -73,6 +72,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_09_051309) do
     t.string "email", default: "", null: false
     t.string "reset_password_token"
     t.string "jti", null: false
+    t.string "password"
   end
 
   add_foreign_key "dislikes", "ingredients"

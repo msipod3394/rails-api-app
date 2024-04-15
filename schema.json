@@ -593,7 +593,7 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "email",
+                  "name": "userId",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
@@ -707,7 +707,7 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "email",
+                  "name": "userId",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
@@ -756,7 +756,7 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "email",
+                  "name": "userId",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
@@ -862,7 +862,7 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "email",
+                  "name": "userId",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
@@ -919,7 +919,7 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "email",
+                  "name": "userId",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
@@ -1054,7 +1054,7 @@
           "fields": [
             {
               "name": "dislikes",
-              "description": "emailを指定して検索、emailの指定がなければ全件取得",
+              "description": "emailを指定して検索",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -1076,7 +1076,7 @@
               "deprecationReason": null,
               "args": [
                 {
-                  "name": "email",
+                  "name": "userId",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
@@ -1113,11 +1113,11 @@
               "deprecationReason": null,
               "args": [
                 {
-                  "name": "userId",
+                  "name": "itemId",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
-                    "name": "ID",
+                    "name": "String",
                     "ofType": null
                   },
                   "defaultValue": null,
@@ -1125,7 +1125,7 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "email",
+                  "name": "userId",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
@@ -1279,7 +1279,7 @@
             },
             {
               "name": "order",
-              "description": "emailを指定して検索、emailの指定がなければ全件取得",
+              "description": "ユーザーIDを指定して検索",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -1301,12 +1301,16 @@
               "deprecationReason": null,
               "args": [
                 {
-                  "name": "email",
+                  "name": "userId",
                   "description": null,
                   "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
                   },
                   "defaultValue": null,
                   "isDeprecated": false,
