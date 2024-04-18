@@ -13,7 +13,7 @@
 # app/graphql/types/ingredient_item_type.rb
 module Types
   class IngredientItemType < GraphQL::Schema::Object
-    field :id, ID, null: false
+    field :id, String, null: false
     field :name, String, null: false
   end
 end

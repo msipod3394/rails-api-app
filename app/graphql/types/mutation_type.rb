@@ -3,18 +3,38 @@
 module Types
   class MutationType < Types::BaseObject
 
+
+    # --------------------------------
+    # order / 注文履歴
+    # --------------------------------
     # 注文履歴登録
     field :create_order, Types::OrderType, null: false do
-      # 引数
       argument :item_id, String, required: true
       argument :user_id, String, required: true
     end
 
     def create_order(item_id:, user_id:)
-      # 新しい注文を作成する関数
-      Order.create(item_id: item_id, user_id: user_id)
+      item = Item.find(item_id)
+      user = User.find_by(id: user_id)
+
+      # ユーザーが存在しない場合はエラーを返す
+      unless user
+        raise GraphQL::ExecutionError, "指定されたメールアドレスに対応するユーザーが見つかりませんでした。"
+      end
+
+      # 新しい注文を作成する
+      order = Order.create(item: item, user: user)
+
+      # 作成された注文オブジェクトを返す
+      order
+
     end
 
+
+
+    # --------------------------------
+    # favorite / お気に入り
+    # --------------------------------
 
     # お気に入り登録
     field :create_favorite, Types::FavoriteType, null: false do
@@ -28,38 +48,152 @@ module Types
       Favorite.create(item_id: item_id, user_id: user_id)
     end
 
-    # 苦手ネタ登録
-    field :create_dislike, Types::DislikeType, null: false do
+
+    # お気に入り登録（配列）
+    field :create_favorites, [Types::FavoriteType], null: false do
       # 引数
-      argument :ingredient_id, ID, required: true
-      argument :email, String, required: true
+      argument :item_ids, [String], required: true
+      argument :user_id, String, required: true
     end
 
-    def create_dislike(ingredient_id:, email:)
-      user = User.find_by(email: email)
+    def create_favorites(item_ids:, user_id:)
+      user = User.find_by(id: user_id)
 
       # ユーザーが存在しない場合はエラーを返す
       unless user
         raise GraphQL::ExecutionError, "指定されたメールアドレスに対応するユーザーが見つかりませんでした。"
       end
 
-      # 苦手ネタを作成する
-      dislike = Dislike.create(ingredient_id: ingredient_id, user: user)
+      favorites = []
 
-      dislike
-    rescue ActiveRecord::RecordNotFound => e
-      GraphQL::ExecutionError.new("指定された食材が見つかりませんでした。")
+      # 各 item_id に対して処理を行う
+      item_ids.each do |item_id|
+
+      # すでにお気に入りに登録されているか確認する
+      existing_favorite = Favorite.find_by(item_id: item_id, user_id: user.id)
+
+      # すでに登録されている場合はスキップする
+      next if existing_favorite
+
+        begin
+          # お気に入りを作成する
+          favirite = Favorite.create(item_id: item_id, user: user)
+          favorites << favirite
+        rescue ActiveRecord::RecordNotFound => e
+          # 指定されたアイテムが見つからない場合はエラーを返す
+          raise GraphQL::ExecutionError.new("指定されたアイテムが見つかりませんでした。")
+        end
+      end
+
+      favorites
+    end
+
+
+    # お気に入り削除（配列）
+    field :delete_favorites, Boolean, null: false do
+      # 引数
+      argument :item_ids, [String], required: true
+      argument :user_id, String, required: true
+    end
+
+    def delete_favorites(item_ids:, user_id:)
+      user = User.find_by(id: user_id)
+
+      # ユーザーが存在しない場合はエラーを返す
+      unless user
+        raise GraphQL::ExecutionError, "ユーザーが見つかりません。"
+      end
+
+      # 各 item_id に対して処理を行う
+      item_ids.each do |item_id|
+        begin
+          # 苦手ネタを削除する
+          favirite = Favorite.find_by(item_id: item_id, user: user)
+          favirite.destroy if favirite
+        rescue ActiveRecord::RecordNotFound => e
+          # 指定された食材が見つからない場合はエラーを返す
+          raise GraphQL::ExecutionError.new("ネタが見つかりません。")
+        end
+      end
+
+      # 成功した場合は true を返す
+      true
+    end
+
+
+
+    # --------------------------------
+    # dislikes / 苦手ネタ
+    # --------------------------------
+
+    # 苦手ネタ登録
+    field :create_dislikes, [Types::DislikeType], null: false do
+      # 引数
+      argument :ingredient_ids, [String], required: true
+      argument :user_id, String, required: true
+    end
+
+    def create_dislikes(ingredient_ids:, user_id:)
+      user = User.find_by(id: user_id)
+
+      # ユーザーが存在しない場合はエラーを返す
+      unless user
+        raise GraphQL::ExecutionError, "指定されたメールアドレスに対応するユーザーが見つかりませんでした。"
+      end
+
+      dislikes = []
+
+      # 各 ingredient_id に対して処理を行う
+      ingredient_ids.each do |ingredient_id|
+        begin
+          # 苦手ネタを作成する
+          dislike = Dislike.create(ingredient_id: ingredient_id, user: user)
+          dislikes << dislike
+        rescue ActiveRecord::RecordNotFound => e
+          # 指定された食材が見つからない場合はエラーを返す
+          raise GraphQL::ExecutionError.new("指定された食材が見つかりませんでした。")
+        end
+      end
+
+      dislikes
     end
 
 
     # 苦手ネタ削除
-    field :deleteDislike, mutation: Mutations::DeleteDislike
-
-    def delete_dislike(ingredient_id:, email:)
-      # 苦手ネタ削除関数
-      Dislike.delete(ingredient_id: ingredient_id, email: email)
+    field :delete_dislikes, Boolean, null: false do
+      # 引数
+      argument :ingredient_ids, [String], required: true
+      argument :user_id, String, required: true
     end
 
+    def delete_dislikes(ingredient_ids:, user_id:)
+      user = User.find_by(id: user_id)
+
+      # ユーザーが存在しない場合はエラーを返す
+      unless user
+        raise GraphQL::ExecutionError, "ユーザーが見つかりません。"
+      end
+
+      # 各 ingredient_id に対して処理を行う
+      ingredient_ids.each do |ingredient_id|
+        begin
+          # 苦手ネタを削除する
+          dislike = Dislike.find_by(ingredient_id: ingredient_id, user: user)
+          dislike.destroy if dislike
+        rescue ActiveRecord::RecordNotFound => e
+          # 指定された食材が見つからない場合はエラーを返す
+          raise GraphQL::ExecutionError.new("ネタが見つかりません。")
+        end
+      end
+
+      # 成功した場合は true を返す
+      true
+    end
+
+
+    # --------------------------------
+    # user / ユーザー登録
+    # --------------------------------
 
     # ユーザー登録
     field :create_user, Types::UserType, null: false do
@@ -72,6 +206,7 @@ module Types
       # 新しいユーザーを登録する関数
       User.create(email: email, password: password)
     end
+
 
   end
 end

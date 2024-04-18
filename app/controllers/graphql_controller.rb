@@ -11,6 +11,7 @@ class GraphqlController < ApplicationController
     query = params[:query]
     operation_name = params[:operationName]
     context = {
+      current_user: # 追加 (deviseで作成されるcurrent_userのこと)
       # Query context goes here, for example:
       # current_user: current_user,
     }
