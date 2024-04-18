@@ -1,4 +1,4 @@
-# 商品情報
+# ユーザー情報
 
 module Types
   class UserType < Types::BaseObject
