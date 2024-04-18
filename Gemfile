@@ -57,7 +57,3 @@ gem 'devise'
 
 gem 'devise-jwt'
 
-PLATFORMS
-  aarch64-linux
-  x86_64-linux # 追加
-end
